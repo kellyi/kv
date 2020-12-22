@@ -1,24 +1,3 @@
-# README
+# KV
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Trying out a key-value store API in Rails like the one described in [https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html](https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html).
