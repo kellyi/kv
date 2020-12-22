@@ -1,5 +1,5 @@
 class Api::StoreController < ApplicationController
   def index
-    binding.pry
+    head :no_content
   end
 end
