@@ -16,12 +16,12 @@ class Store
   end
 
   def self.create(key:, value:)
-    raise KeyExistsError if find(key: key)
+    raise KeyExistsError if find(key: key.to_s)
 
-    @@storage.update(key => value)
+    @@storage.update(key.to_s => value)
   end
 
   def self.find(key:)
-    @@storage.fetch(key, nil)
+    @@storage.fetch(key.to_s, nil)
   end
 end

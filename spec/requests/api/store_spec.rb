@@ -22,13 +22,13 @@ RSpec.describe Api::StoreController do
     context 'when the key is not present in the Store' do
       it 'saves the key and value' do
         expect { post '/api/store?key=hello&value=world' }
-          .to change { Store.all }.from({}).to(hello: 'world')
+          .to change { Store.all }.from({}).to('hello' => 'world')
       end
     end
 
     context 'when the key is present in the Store' do
       before do
-        Store.create(key: :hello, value: 'hello')
+        Store.create(key: 'hello', value: 'hello')
       end
 
       it 'returns 409' do

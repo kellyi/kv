@@ -12,7 +12,7 @@ RSpec.describe Store do
     end
 
     it 'returns all keys and values' do
-      expect(subject.all).to include(hello: :hello, world: :world)
+      expect(subject.all).to include('hello' => :hello, 'world' => :world)
     end
   end
 
@@ -26,7 +26,7 @@ RSpec.describe Store do
 
     it 'resets storage and removes all keys and values' do
       expect { subject.reset! }
-        .to change { subject.all }.from(hello: :hello, world: :world).to({})
+        .to change { subject.all }.from('hello' => :hello, 'world' => :world).to({})
     end
   end
 
@@ -36,12 +36,12 @@ RSpec.describe Store do
     context 'when the key does not exist in the Store' do
       it 'saves the key and value' do
         expect { subject.create(key: :hello, value: :world) }
-          .to change { subject.all }.from({}).to(hello: :world)
+          .to change { subject.all }.from({}).to('hello' => :world)
       end
     end
 
     context 'when the key exists in the Store' do
-      before { Store.create(key: :hello, value: :hello) }
+      before { Store.create(key: 'hello', value: :hello) }
 
       it 'raises an error' do
         expect { subject.create(key: :hello, value: :world) }

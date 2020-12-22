@@ -22,7 +22,7 @@ class Api::StoreController < ApplicationController
   private
 
   def key
-    params.fetch(:key).to_sym
+    params.fetch(:key)
   end
 
   def value
