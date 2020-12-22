@@ -67,4 +67,44 @@ RSpec.describe Store do
       end
     end
   end
+
+  describe '.update' do
+    subject { described_class }
+
+    context 'when the key exists in the store' do
+      before { Store.create(key: :hello, value: :world) }
+
+      it 'updates the value for the key' do
+        expect { subject.update(key: :hello, value: :hello) }
+          .to change { subject.all }.from('hello' => :world).to('hello' => :hello)
+      end
+    end
+
+    context 'when the key does not exist in the store' do
+      it 'raises a KeyDoesNotExistError' do
+        expect { subject.update(key: :hello, value: :value) }
+          .to raise_error Store::KeyDoesNotExistError
+      end
+    end
+  end
+
+  describe '.delete' do
+    subject { described_class }
+
+    context 'when the key exists in the store' do
+      before { Store.create(key: :hello, value: :world) }
+
+      it 'deletes the key and value' do
+        expect { subject.delete(key: :hello) }
+          .to change { subject.all }.from('hello' => :world).to({})
+      end
+    end
+
+    context 'when the key does not exist in the store' do
+      it 'raises a KeyDoesNotExistError' do
+        expect { subject.delete(key: :hello) }
+          .to raise_error Store::KeyDoesNotExistError
+      end
+    end
+  end
 end

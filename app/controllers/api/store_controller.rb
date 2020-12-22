@@ -19,6 +19,18 @@ class Api::StoreController < ApplicationController
     end
   end
 
+  def update
+    head :no_content if Store.update(key: key, value: value)
+  rescue Store::KeyDoesNotExistError
+    head :not_found
+  end
+
+  def destroy
+    head :no_content if Store.delete(key: key)
+  rescue Store::KeyDoesNotExistError
+    head :no_content
+  end
+
   private
 
   def key
