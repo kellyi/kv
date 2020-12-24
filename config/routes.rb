@@ -7,5 +7,12 @@ Rails.application.routes.draw do
         delete '/', action: 'destroy'
       end
     end
+
+    resources :binary_tree, only: [:index, :create, :show] do
+      collection do
+        put '/', action: 'update'
+        delete '/', action: 'destroy'
+      end
+    end
   end
 end

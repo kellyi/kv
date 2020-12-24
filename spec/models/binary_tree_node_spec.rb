@@ -130,7 +130,7 @@ RSpec.describe BinaryTreeNode do
     end
 
     context 'when the current node key is less than the lookup key' do
-      let(:key) { 5}
+      let(:key) { 5 }
       let(:value) { 8 }
       let(:lookup_key) { 12 }
 
@@ -146,6 +146,133 @@ RSpec.describe BinaryTreeNode do
         it 'returns what it finds from traversing the right node' do
           expect(subject.find(lookup_key: lookup_key)).to eq 24
         end
+      end
+    end
+  end
+
+  describe '#key_value' do
+    subject { described_class.new(key: 10, value: 20) }
+
+    it 'returns a dictionary pairing the key and the value' do
+      expect(subject.key_value).to eq({ 10 => 20 })
+    end
+  end
+
+  describe '#pairs' do
+    subject do
+      described_class.new(key: 10,
+                          value: 20,
+                          left: described_class.new(key: 4,
+                                                    value: 8),
+                          right: described_class.new(key: 15,
+                                                     value: 30))
+    end
+
+    it 'returns a dictionary containing all the key value pairs' do
+      expect(subject.pairs).to eq({ 10 => 20, 4 => 8, 15 => 30 })
+    end
+  end
+
+  describe '#min' do
+    let(:minimum_node) { described_class.new(key: 4, value: 8) }
+    subject do
+      described_class.new(key: 10,
+                          value: 20,
+                          left: minimum_node,
+                          right: described_class.new(key: 15,
+                                                     value: 30))
+    end
+
+    it 'returns the node with the smallest key in the tree' do
+      expect(subject.min).to eq minimum_node
+    end
+  end
+
+  describe '#inorder_successor' do
+    let(:successor) { described_class.new(key: 13, value: 26) }
+    subject do
+      described_class.new(key: 10,
+                          value: 20,
+                          right: described_class.new(key: 15,
+                                                     value: 30,
+                                                     left: successor))
+    end
+
+    it 'returns the inorder successor node' do
+      expect(subject.inorder_successor).to eq successor
+    end
+  end
+
+  describe '#delete' do
+    let(:key_to_delete) { 10 }
+
+    context 'when the node key is nil' do
+      subject { described_class.new(key: nil, value: nil) }
+
+      it 'returns nil' do
+        expect(subject.delete(lookup_key: key_to_delete)).to be_nil
+      end
+    end
+
+    context 'when the node is a leaf and it has a key equal to the lookup key' do
+      subject { described_class.new(key: 10, value: 10) }
+
+      it 'deletes the key-value pair' do
+        expect { subject.delete(lookup_key: key_to_delete) }
+          .to change { subject.key }.from(10).to(nil)
+          .and change { subject.value }.from(10).to(nil)
+      end
+    end
+
+    context 'when the node has one leaf and has a key equal to the lookup key' do
+      subject do
+        described_class.new(key: 10,
+                            value: 20,
+                            left: described_class.new(key: 8,
+                                                      value: 16))
+      end
+
+      it 'deletes the key-value pair and promotes a new node' do
+        expect { subject.delete(lookup_key: key_to_delete) }
+          .to change { subject.key }.from(10).to(8)
+          .and change { subject.value }.from(20).to(16)
+      end
+    end
+
+    context 'when the node has multiple leaves' do
+      let(:key_to_delete) { 15 }
+      let(:successor) { described_class.new(key: 16, value: 32) }
+
+      subject do
+        described_class.new(key: 15,
+                            value: 30,
+                            left: described_class.new(key: 8,
+                                                      value: 16),
+                            right: described_class.new(key: 20,
+                                                       value: 40,
+                                                       left: successor))
+      end
+
+      it 'deletes the key-value pair and promotes the inorder successor node' do
+        expect { subject.delete(lookup_key: key_to_delete) }
+          .to change { subject.key }.from(15).to(16)
+          .and change { subject.value }.from(30).to(32)
+          .and change { subject.right.find(lookup_key: 16) }.from(32).to(nil)
+      end
+    end
+
+    context 'when the key is not in the tree' do
+      subject do
+        described_class.new(key: 15,
+                            value: 30,
+                            left: described_class.new(key: 8,
+                                                      value: 16),
+                            right: described_class.new(key: 20,
+                                                       value: 40))
+      end
+
+      it 'returns nil' do
+        expect(subject.delete(lookup_key: key_to_delete)).to be_nil
       end
     end
   end
